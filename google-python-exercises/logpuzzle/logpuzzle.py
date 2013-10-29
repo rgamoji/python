@@ -40,8 +40,9 @@ def download_images(img_urls, dest_dir):
   Creates the directory if necessary.
   """
   if not (os.path.exists(dest_dir)):
-    print dest_dir,"does not exist. The downloads will be in the current directory."
-    dest_dir="."
+    print dest_dir,"does not exist. Creating it."
+    os.path.mkdir(dest_dir)
+    #dest_dir="."
   index_file=open(dest_dir+"/index.html","w")
   index_file.write("<verbatim>"+"\n")
   index_file.write("<html>"+"\n")
