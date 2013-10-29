@@ -110,10 +110,12 @@ def main():
            stat_fp.close()
     
 def usage():
-    print "Usage: [<player_name> --game [word_length]] [--my_word [word]]"
+    print "Usage: [<player_name> [--game [word_length] [--print_stats]] [--my_word [word]]"
     print "<player_name> to save the statistics."
     print "--game: To play the scrabble word game with a word having [word_length] characters. Default is 5"
+    print "--print_stats: To display the game statistics of <player_name>"
     print "--my_word: Use this option to see all the words within the input [word]"
+   
 
 def print_summary(isSummary,user_list,my_list=None):
     score=0
