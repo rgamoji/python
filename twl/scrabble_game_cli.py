@@ -67,7 +67,7 @@ class ScrabbleMain(object):
         return self.build_word_list(input)
     """ 
 def main():    
-    scr=ScrabbleMain("/Users/rgamoji/personal/python/twl/TWL06.txt")
+    scr=ScrabbleMain("./TWL06.txt")
     if len(sys.argv) <= 1:
         usage()
         sys.exit(1) 
@@ -82,7 +82,7 @@ def main():
            exit(1)
         args=sys.argv[2:]
         player_name=sys.argv[1]
-        stat_file_path="/Users/rgamoji/personal/python/twl/"
+        stat_file_path="./"
         stat_file_name=player_name+"_result.txt"
         stat_file=stat_file_path+stat_file_name
         if not path.exists(stat_file):
