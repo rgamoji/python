@@ -1,0 +1,29 @@
+from random import randint
+from word_jumble_class import JumbleWord 
+
+jw=JumbleWord()
+input_file=jw.open_file()
+my_dict={}
+
+for char in "ABCDEF":
+    my_dict=jw.build_dictionary(my_dict,input_file,char)
+jw.close_file(input_file)
+key=randint(1,len(my_dict))
+random_word = jw.get_random_word(my_dict,key)
+jumbled_word = jw.jumble(random_word)
+
+print "You need to guess what",jumbled_word," really is and you have got",len(jumbled_word)," chances"
+your_guess=""
+for i in range(0,len(jumbled_word)):
+    your_guess+="-"
+count=0
+while count < len(jumbled_word):
+   char=raw_input("Enter your guess: ")
+   your_guess=jw.fill_guess_word(random_word,your_guess,char)
+   print your_guess,"until now!"
+   count+=1
+   if your_guess == random_word:
+       print "Viola! You win! You guessed the word correctly!",your_guess
+       break
+else:
+   print "Oops! You lost. You guessed",your_guess,"and the correct word is",random_word 
