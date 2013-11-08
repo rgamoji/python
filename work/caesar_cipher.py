@@ -29,8 +29,6 @@ def main():
     print "Original:",input,"Key:",key,"Cipher:",cip
     input=cipher(cip,key,True)
     print "Cipher:",cip,"Key:",key,"Original:",input
-    
-
 
 if __name__ == '__main__':
    main()

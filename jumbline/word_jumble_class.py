@@ -16,7 +16,6 @@ class JumbleWord(object):
            if len(scr_string) == len(word):
               break
         return scr_string
-    
     def open_file(self):
         word_file = open("/usr/share/dict/words","r")
         return word_file    
