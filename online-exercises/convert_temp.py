@@ -15,4 +15,4 @@ if type.lower() == "c":
 	ttype="F"
 else:
 	ttype="C"	
-print str(temp)+" "+type+" = "+str(convert(temp,type))+" "+ttype
+print str(temp)+" "+type.upper()+" = "+str(convert(temp,type))+" "+ttype
