@@ -6,8 +6,9 @@ from json import loads
 import Tkinter
 
 class JumblineGame(object):
-    def __init__(self):
-        pass
+    def __init__(self,word_file):
+        #self.word_file=word_file
+        self.j_obj=JumblineBuilder(word_file)
     def print_summary(self,isSummary,user_list,my_list=None):
         score=0
         if isSummary:
@@ -34,15 +35,19 @@ class JumblineGame(object):
             score+=score_dict[char]
         return score
           
-    def fill_words(self,word,scr):
+    def fill_words(self,word):
         if not word.isalpha():
            print word,"is not an alphabetical word. Enter correct word."
            sys.exit(1)
-        scr.build_word_list()
-        all_words=scr.create_words(word)
+        self.j_obj.build_word_list()
+        all_words=self.j_obj.create_words(word)
         self.print_summary(False,all_words)
     
-    def play_game(self,stat_file,choice,jumbled,all_words,orig_word):
+    def play_game(self,stat_file,choice):
+    #def play_game(self,stat_file,choice,jumbled,all_words,orig_word):
+        orig_word=self.j_obj.get_input_word(choice)
+        jumbled=self.j_obj.jumble(orig_word)
+        all_words=self.j_obj.create_words(orig_word)
         guess_list=[]
         for item in all_words:
             guess_list.append("".join("-"*len(item)))
@@ -86,7 +91,8 @@ class JumblineGame(object):
             score += self.compute_score(item)
         result_dict={time.asctime().replace(" ","_"):{'Result':result,'Word':guess_word,'Guessed':guess_list,'Correct':all_words,'Score':score}}
         results.write(str(result_dict)+"\n")
-        results.close()
+        results.flush()
+        #results.close()
     
     def print_stats(self,fileName):
         result_list=[]
@@ -116,12 +122,15 @@ class JumblineGame(object):
 class JumblineBuilder(object):
     afile=None
     out_list={3:[],4:[],5:[],6:[],7:[],8:[],9:[],10:[],11:[],12:[],13:[],14:[],15:[]}
-    max_word_len=0
     def __init__(self,file_name):
-        self.afile=open(file_name,"r")
+        self.afile=file_name
+        #self.afile=open(file_name,"r")
+
+    def __del__(self):
+        if not self.afile.closed:
+           self.afile.close()
 
     def jumble(self,word):
-        scrambled=""
         scr_string=""
         guess_list=[]
         next=0
@@ -145,12 +154,12 @@ class JumblineBuilder(object):
     """
     def build_word_list(self):
         word=self.afile.readline().strip()
+        #word=word_file.readline().strip()
         while len(word) > 0 :
             if len(word) > 2:
                 item_len=len(word)
                 self.out_list[item_len].append(word)
             word=self.afile.readline().strip()
-        self.afile.close()
         return self.out_list
 
     def get_input_word(self,input):

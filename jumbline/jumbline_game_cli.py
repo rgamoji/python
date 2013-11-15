@@ -6,15 +6,16 @@ import time
 from os import system,path
 from json import loads
 def main():    
-    scr=JumblineBuilder("./TWL06.txt")
-    game=JumblineGame()
+    word_file=open("./TWL06.txt")
+    #scr=JumblineBuilder(word_file)
+    game=JumblineGame(word_file)
     if len(sys.argv) <= 1:
         usage()
         sys.exit(1) 
     elif sys.argv[1].startswith('--') and sys.argv[1] == '--my_word':
         args=sys.argv[1:]
         word=args[1]
-        game.fill_words(word.upper(),scr)
+        game.fill_words(word.upper())
     else: 
         if sys.argv[1].startswith('--'):
            usage()
@@ -34,18 +35,28 @@ def main():
               choice=5
            else:
               choice=int(args[1])
-           orig_word=scr.get_input_word(choice)
-           #jumbled=JumbleWord().jumble(orig_word)
-           jumbled=scr.jumble(orig_word)
-           all_words=scr.create_words(orig_word)
-           game.play_game(stat_fp,choice,jumbled,all_words,orig_word)
-    
+           loop=raw_input("Play in loop(y/n): ")
+           if loop.lower() == 'y':
+              print "You chose Loop mode. Press Ctrl-C to stop playing."
+              try:
+                 while 1: 
+                     #orig_word=scr.get_input_word(choice)
+                     #jumbled=scr.jumble(orig_word)
+                     #all_words=scr.create_words(orig_word)
+                     game.play_game(stat_fp,choice)
+              except KeyboardInterrupt:
+                 print "Exiting the game now."
+           else:
+              game.play_game(stat_fp,choice)
+                 
         elif args[0] == '--print_stats':
            game.print_stats(stat_file)
         
         if not stat_fp.closed:
-           print stat_file,"is still open. Closing it."
+           stat_fp.flush()
            stat_fp.close()
+        if not word_file.closed:
+           word_file.close()
     
 def usage():
     print "Usage: [<player_name> [--game [word_length] [--print_stats]] [--my_word [word]]"
