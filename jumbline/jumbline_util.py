@@ -43,47 +43,59 @@ class JumblineGame(object):
         all_words=self.j_obj.create_words(word)
         self.print_summary(False,all_words)
     
-    def play_game(self,stat_file,choice):
-    #def play_game(self,stat_file,choice,jumbled,all_words,orig_word):
-        orig_word=self.j_obj.get_input_word(choice)
-        jumbled=self.j_obj.jumble(orig_word)
-        all_words=self.j_obj.create_words(orig_word)
-        guess_list=[]
-        for item in all_words:
-            guess_list.append("".join("-"*len(item)))
-        count=len(all_words)
-        try:
-           while count > 0 and "".join(guess_list).find('-') != -1:
-               system("clear")
-               print "Your Word:",jumbled," and you have",count,"attempts remaining."
-               self.print_summary(False,guess_list)
-               guess=raw_input("Enter your guess: ").upper()
-               if guess in all_words:
-                   if len(guess) == len(orig_word) and guess not in guess_list:
-                      print "Wow! You guessed the tough One!"
-                      print "Awarding bonus attempts."
-                      count += 5
-                   guess_list[all_words.index(guess)]=guess
-               count -= 1
-        except KeyboardInterrupt:
-              print "\nIt's ok to get bored!"
-    	      self.print_summary(True,guess_list,all_words)
-              choice=raw_input("Do you want to save this results to file? (y/n): ")
-              if choice.lower() in "Yy":
-                 self.save_game(stat_file,'Interrupt',jumbled,guess_list,all_words)
-              sys.exit(0)
-        system("clear")
-        if "".join(guess_list).find('-') != -1:
-            result='Lost'
-            print "Sorry! You lost!"
-    	    self.print_summary(True,guess_list,all_words)
+    def play_game(self,player,choice):
+        repeat='y'
+        print "Player is: ",player,"Choice is",choice
+        stat_file=player+"_result.txt"
+        if not path.exists(stat_file):
+           stat_fp=open(stat_file,"w")
         else:
-            result='Win'
-            print "Congratulations! You guess all the words correctly."
-            self.print_summary(True,guess_list,all_words)
-        choice=raw_input("Do you want to save this results to file? (y/n): ")
-        if choice.lower() in "Yy":
-             self.save_game(stat_file,result,jumbled,guess_list,all_words)
+           stat_fp=open(stat_file,"a+")
+        while repeat.lower() == 'y':
+            orig_word=self.j_obj.get_input_word(choice)
+            jumbled=self.j_obj.jumble(orig_word)
+            all_words=self.j_obj.create_words(orig_word)
+            guess_list=[]
+            for item in all_words:
+                guess_list.append("".join("-"*len(item)))
+            count=len(all_words)
+            try:
+               while count > 0 and "".join(guess_list).find('-') != -1:
+                   system("clear")
+                   print "Your Word:",jumbled," and you have",count,"attempts remaining."
+                   self.print_summary(False,guess_list)
+                   guess=raw_input("Enter your guess: ").upper()
+                   if guess in all_words:
+                       if len(guess) == len(orig_word) and guess not in guess_list:
+                          print "Wow! You guessed the tough One!"
+                          print "Awarding bonus attempts."
+                          count += 5
+                       guess_list[all_words.index(guess)]=guess
+                   count -= 1
+            except KeyboardInterrupt:
+                  print "\nIt's ok to get bored!"
+        	  self.print_summary(True,guess_list,all_words)
+                  save=raw_input("Do you want to save this results to file? (y/n): ")
+                  if save.lower() == "y":
+                     self.save_game(stat_fp,'Interrupt',jumbled,guess_list,all_words)
+                  stat_fp.flush()
+                  stat_fp.close()
+                  sys.exit(0)
+            system("clear")
+            if "".join(guess_list).find('-') != -1:
+                result='Lost'
+                print "Sorry! You lost!"
+        	self.print_summary(True,guess_list,all_words)
+            else:
+                result='Win'
+                print "Congratulations! You guess all the words correctly."
+                self.print_summary(True,guess_list,all_words)
+            save=raw_input("Do you want to save this results to file? (y/n): ")
+            if save.lower() == "y":
+                 self.save_game(stat_fp,result,jumbled,guess_list,all_words)
+            repeat=raw_input("Play Again? (y/n): ")
+        stat_fp.flush()
+        stat_fp.close()
         
     def save_game(self,results,result,guess_word,guess_list,all_words):
         score=0
@@ -94,9 +106,9 @@ class JumblineGame(object):
         results.flush()
         #results.close()
     
-    def print_stats(self,fileName):
+    def print_stats(self,player):
         result_list=[]
-        fp=open(fileName,"r")
+        fp=open(player+"_result.txt","r")
         line = fp.readline()
         while len(line) > 0:
             line=line.strip().replace('\'','\"')

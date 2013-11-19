@@ -1,5 +1,4 @@
 #!/usr/bin/python
-#from word_jumble_class import JumbleWord
 from jumbline_util import JumblineBuilder,JumblineGame
 import sys 
 import time
@@ -21,40 +20,17 @@ def main():
            usage()
            exit(1)
         args=sys.argv[2:]
-        player_name=sys.argv[1]
-        stat_file_path="./"
-        stat_file_name=player_name+"_result.txt"
-        stat_file=stat_file_path+stat_file_name
-        if not path.exists(stat_file):
-           stat_fp=open(stat_file,"w")
-        else:
-           stat_fp=open(stat_file,"a+")
-    
+        print sys.argv,"are the args"
         if args[0] == '--game':
            if len(args) == 1:
               choice=5
+              print "Defaulting to",choice
            else:
               choice=int(args[1])
-           loop=raw_input("Play in loop(y/n): ")
-           if loop.lower() == 'y':
-              print "You chose Loop mode. Press Ctrl-C to stop playing."
-              try:
-                 while 1: 
-                     #orig_word=scr.get_input_word(choice)
-                     #jumbled=scr.jumble(orig_word)
-                     #all_words=scr.create_words(orig_word)
-                     game.play_game(stat_fp,choice)
-              except KeyboardInterrupt:
-                 print "Exiting the game now."
-           else:
-              game.play_game(stat_fp,choice)
-                 
+           game.play_game(sys.argv[1],choice)
         elif args[0] == '--print_stats':
-           game.print_stats(stat_file)
-        
-        if not stat_fp.closed:
-           stat_fp.flush()
-           stat_fp.close()
+           game.print_stats(sys.argv[1])
+
         if not word_file.closed:
            word_file.close()
     
