@@ -208,13 +208,23 @@ Still a lot of work is pending for the UI Class.
 Need to add a lot of features and ui gadgets. I am still working on it.
 """
 class JumblineUI(Tkinter.Frame):
-    def __init__(self,parent,word,guess_list,correct_list):
+    def __init__(self,parent,word_file,choice=5):
+        self.j_obj=JumblineBuilder(word_file)
+        self.orig_word=self.j_obj.get_input_word(choice)
+        self.jumbled=self.j_obj.jumble(self.orig_word)
+        self.correct_list=self.j_obj.create_words(self.orig_word)
+        #orig_word=scr.get_input_word(5)
+        #jumbled=scr.jumble(orig_word)
+        #all_words=scr.create_words(orig_word)
+        self.guess_list=[]
+        for item in self.correct_list:
+            self.guess_list.append("".join("-"*len(item)))
         Tkinter.Frame.__init__(self,parent)
-        self.parent = parent
-        self.word=word
-        self.correct_list=correct_list
-        self.guess_list=guess_list 
-        self.initialize(self.word,self.guess_list)
+        self.parent=parent
+        #self.word=word
+        #self.correct_list=correct_list
+        #self.guess_list=guess_list 
+        self.initialize(self.orig_word,self.guess_list)
         self.count=0
 
     def initialize(self,word,guess_list):
@@ -231,8 +241,8 @@ class JumblineUI(Tkinter.Frame):
     def createCanvas(self):
         self.c = Tkinter.Canvas(self)
         self.c.grid(column=0,row=1,sticky='W')
-        self.createWidgets(self.word,self.guess_list)
-        self.drawLayout(self.word,self.ui_textField_row)
+        self.createWidgets(self.orig_word,self.guess_list)
+        self.drawLayout(self.orig_word,self.ui_textField_row)
         #self.setScroll()
 
     def createWidgets(self,word,guess_list):
