@@ -1,7 +1,7 @@
 from random import randint
 import sys 
 import time
-from os import system,path
+from os import system,path,name
 from json import loads
 import Tkinter
 
@@ -61,7 +61,7 @@ class JumblineGame(object):
             count=len(all_words)
             try:
                while count > 0 and "".join(guess_list).find('-') != -1:
-                   system("clear" if os.name != "nt" else "cls")
+                   system("clear" if name != "nt" else "cls")
                    print "Your Word:",jumbled," and you have",count,"attempts remaining."
                    self.print_summary(False,guess_list)
                    guess=raw_input("Enter your guess: ").upper()
@@ -81,7 +81,7 @@ class JumblineGame(object):
                   stat_fp.flush()
                   stat_fp.close()
                   sys.exit(0)
-            system("clear" if os.name != "nt" else "cls")
+            system("clear" if name != "nt" else "cls")
             if "".join(guess_list).find('-') != -1:
                 result='Lost'
                 print "Sorry! You lost!"
