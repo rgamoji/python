@@ -19,8 +19,19 @@ class JumblineGame(object):
                score+=self.compute_score(item)
            print "Your total Score is: ",score
         else:
+            col=1
+            count=0
             for item in user_list:
-                print "",item
+                if col <= 10:
+                   if count == len(user_list)-1:
+                      print "%15s" %(item)
+                   else:
+                      print "%15s" %(item),
+                   col+=1
+                else:
+                   col=1
+                   print "%15s" %(item)
+                count+=1
            
     def compute_score(self,word):
         score_dict = {
