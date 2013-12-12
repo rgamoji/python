@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 def remove_duplicates(my_list):
     to_return=[]
     for item in my_list:

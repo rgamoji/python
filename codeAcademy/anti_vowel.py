@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 def anti_vowel(string):
     output=""
     for index in range(0,len(string)):

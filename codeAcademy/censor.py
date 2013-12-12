@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 def censor(line,word):
     string=line.split(' ')
     output=""

@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 def get_list_len_type(my_list):
     if (len(my_list) %2 == 0):
         return "Even"

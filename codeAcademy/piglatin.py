@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 def check_y(word):
     chk_str="aeiouy"
     for c in word.lower():
