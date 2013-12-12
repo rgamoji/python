@@ -32,5 +32,7 @@ for story in json_obj['list']['story']:
 	if 'producer' in story:
 	    print "IMAGE CREDIT: " + story['image'][0]['producer']['$text']
 	print "MP3 AUDIO: " + story['audio'][0]['format']['mp3'][0]['$text'] + "\n"
+        for paragraph in story['textWithHtml']['paragraph']:
+	    print paragraph['$text'] + "\n"
 	
 	
