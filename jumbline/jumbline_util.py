@@ -2,7 +2,7 @@ from random import randint
 import sys 
 import time
 from os import system,path,name
-from json import loads
+from json import loads,dumps
 import Tkinter
 
 class JumblineGame(object):
@@ -131,6 +131,8 @@ class JumblineGame(object):
             result_list.append(result_dict)
             line=fp.readline()
         print "No of Games Played: ",len(result_list)
+        for item in result_list:
+            print dumps(item,indent=4)
         win_count=0
         lost_count=0
         incomplete=0
