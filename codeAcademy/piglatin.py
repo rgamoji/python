@@ -1,4 +1,11 @@
 #!/usr/bin/env python
+"""
+Outputs the pig-latin form of input string. 
+Ex:
+$ ./piglatin.py 
+Enter a word or sentence: How are you brother!
+Owhay areway ouyay otherbray! 
+"""
 def check_y(word):
     chk_str="aeiouy"
     for c in word.lower():

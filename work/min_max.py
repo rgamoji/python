@@ -17,7 +17,7 @@ def main():
     my_list=[]
     count=0
     while count < 20:
-        my_list.append(random.randint(0,300))
+        my_list.append(random.randint(-10,300))
         count+=1
     items=get_min_max(my_list)
     print "Input:",my_list

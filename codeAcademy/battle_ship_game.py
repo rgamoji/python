@@ -1,4 +1,34 @@
 #!/usr/bin/env python
+"""
+Small tic-tac-toe kind of game. 
+You get 4 turns to guess the row and column in the matrix (ocean) to guess where the battle ship is hidden. 
+Ex:
+$ ./battle_ship_game.py 
+Let's play Battleship!
+O O O O O
+O O O O O
+O O O O O
+O O O O O
+O O O O O
+Guess Row:2
+Guess Col:2
+You missed my battleship!
+Guess Row:1
+Guess Col:0
+You missed my battleship!
+Guess Row:4
+Guess Col:3
+You missed my battleship!
+Guess Row:2
+Guess Col:1
+You missed my battleship!
+Game Over
+O S O O O
+X O O O O
+O X X O O
+O O O O O
+O O O X O
+"""
 from random import randint
 
 board = []

@@ -1,4 +1,34 @@
 #!/usr/bin/env python
+"""
+Roshambo (rock-paper-scissors) game. Prompts for number of attempts and let's you play rock-paper-scissors for those many times until you win.
+Ex:
+$ ./roshambo.py 
+Welcome to Rock, Paper, Scissors!
+How many points are required for win? 3
+Choose (R)ock, (P)aper, or (S)cissors? r
+It's a  Draw
+Choose (R)ock, (P)aper, or (S)cissors? p
+
+You chose: [ Paper ] I chose:[ Rock ]	You Win!
+Choose (R)ock, (P)aper, or (S)cissors? s
+
+You chose: [ Scissors ] I chose:[ Rock ]	I Win!
+Choose (R)ock, (P)aper, or (S)cissors? r
+It's a  Draw
+Choose (R)ock, (P)aper, or (S)cissors? p
+It's a  Draw
+Choose (R)ock, (P)aper, or (S)cissors? s
+It's a  Draw
+Choose (R)ock, (P)aper, or (S)cissors? r
+
+You chose: [ Rock ] I chose:[ Scissors ]	You Win!
+Choose (R)ock, (P)aper, or (S)cissors? p
+It's a  Draw
+Choose (R)ock, (P)aper, or (S)cissors? s
+
+You chose: [ Scissors ] I chose:[ Paper ]	You Win!
+Final Score: You 3 Me  1
+"""
 from random import randint
 from sys import exit
 
@@ -26,8 +56,6 @@ def winner(human,comp):
 	  return 'Draw'
 
 roshambo={1:'Rock',2:'Paper',3:'Scissors'}
-my_choice=randint(1,3)
-print roshambo[my_choice]
 print "Welcome to Rock, Paper, Scissors!"
 try:
     to_win=int(raw_input("How many points are required for win? "))
