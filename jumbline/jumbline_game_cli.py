@@ -6,7 +6,7 @@ from os import system,path
 from json import loads
 def main():    
     word_file=open("./TWL06.txt")
-    #scr=JumblineBuilder(word_file)
+    #word_file=open("/usr/share/dict/words")
     game=JumblineGame(word_file)
     if len(sys.argv) <= 1:
         usage()

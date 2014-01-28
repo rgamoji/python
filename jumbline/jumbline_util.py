@@ -131,8 +131,10 @@ class JumblineGame(object):
             result_list.append(result_dict)
             line=fp.readline()
         print "No of Games Played: ",len(result_list)
+        '''
         for item in result_list:
             print dumps(item,indent=4)
+        '''
         win_count=0
         lost_count=0
         incomplete=0
@@ -150,7 +152,8 @@ class JumblineGame(object):
 
 class JumblineBuilder(object):
     afile=None
-    out_list={3:[],4:[],5:[],6:[],7:[],8:[],9:[],10:[],11:[],12:[],13:[],14:[],15:[]}
+    #out_list={3:[],4:[],5:[],6:[],7:[],8:[],9:[],10:[],11:[],12:[],13:[],14:[],15:[]}
+    out_list={}
     def __init__(self,file_name):
         self.afile=file_name
         #self.afile=open(file_name,"r")
@@ -187,7 +190,10 @@ class JumblineBuilder(object):
         while len(word) > 0 :
             if len(word) > 2:
                 item_len=len(word)
-                self.out_list[item_len].append(word)
+                if self.out_list.has_key(item_len):
+                   self.out_list[item_len].append(word.upper())
+                else:
+                   self.out_list[item_len]=[word.upper()]
             word=self.afile.readline().strip()
         return self.out_list
 
