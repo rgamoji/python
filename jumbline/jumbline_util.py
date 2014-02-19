@@ -60,7 +60,7 @@ class JumblineGame(object):
     
     def play_game(self,player,choice):
         repeat='y'
-        print "Player is: ",player,"Choice is",choice
+        #print "Player is: ",player,"Choice is",choice
         stat_file=player+"_result.txt"
         if not path.exists(stat_file):
            stat_fp=open(stat_file,"w")
@@ -81,9 +81,9 @@ class JumblineGame(object):
                    self.print_summary(False,guess_list)
                    guess=raw_input("Enter your guess: ").upper()
                    if guess in all_words:
-                       if len(guess) == len(orig_word) and guess not in guess_list:
-                          print "Wow! You guessed the tough One!"
-                          print "Awarding bonus attempts."
+                       if (len(guess) == len(orig_word) or len(guess) == len(orig_word)-1) and guess not in guess_list:
+                       #   print "Wow! You guessed the tough One!"
+                       #   print "Awarding bonus attempts."
                           count += 5
                        guess_list[all_words.index(guess)]=guess
                    count -= 1
@@ -207,7 +207,12 @@ class JumblineBuilder(object):
         return len(input)
 
     def create_words(self,guess_word):
-        min_length = 3
+        if len(guess_word) == 5:
+           min_length = 3
+        elif 5 < len(guess_word) <= 7:
+           min_length = 4
+        else:
+           min_length=5
         master_list=[]
         for length in range(min_length,len(guess_word)+1):
             for word in self.out_list[length]:
