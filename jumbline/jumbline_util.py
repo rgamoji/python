@@ -6,6 +6,7 @@ from json import loads,dumps
 import Tkinter
 
 class JumblineGame(object):
+    stat_fp=None
     def __init__(self,word_file):
         #self.word_file=word_file
         self.j_obj=JumblineBuilder(word_file)
@@ -58,14 +59,9 @@ class JumblineGame(object):
         all_words=self.j_obj.create_words(word)
         self.print_summary(False,all_words)
     
-    def play_game(self,player,choice):
+    def play_game(self,choice):
         repeat='y'
         #print "Player is: ",player,"Choice is",choice
-        stat_file=player+"_result.txt"
-        if not path.exists(stat_file):
-           stat_fp=open(stat_file,"w")
-        else:
-           stat_fp=open(stat_file,"a+")
         while repeat.lower() == 'y':
             orig_word=self.j_obj.get_input_word(choice)
             jumbled=self.j_obj.jumble(orig_word)
@@ -90,46 +86,56 @@ class JumblineGame(object):
             except KeyboardInterrupt:
                   print "\nIt's ok to get bored!"
         	  self.print_summary(True,guess_list,all_words)
-                  save=raw_input("Do you want to save this results to file? (y/n): ")
-                  if save.lower() == "y":
-                     self.save_game(stat_fp,'Interrupt',jumbled,guess_list,all_words)
-                  stat_fp.flush()
-                  stat_fp.close()
+                  self.save_game('Interrupt',jumbled,guess_list,all_words)
                   sys.exit(0)
             system("clear" if name != "nt" else "cls")
             if "".join(guess_list).find('-') != -1:
                 result='Lost'
                 print "Sorry! You lost!"
         	self.print_summary(True,guess_list,all_words)
+                self.save_game(result,jumbled,guess_list,all_words)
             else:
                 result='Win'
                 print "Congratulations! You guess all the words correctly."
                 self.print_summary(True,guess_list,all_words)
-            save=raw_input("Do you want to save this results to file? (y/n): ")
-            if save.lower() == "y":
-                 self.save_game(stat_fp,result,jumbled,guess_list,all_words)
+                self.save_game(result,jumbled,guess_list,all_words)
             repeat=raw_input("Play Again? (y/n): ")
-        stat_fp.flush()
-        stat_fp.close()
+            if self.stat_fp and not self.stat_fp.closed:
+               self.stat_fp.close()
         
-    def save_game(self,results,result,guess_word,guess_list,all_words):
+    def save_game(self,result,guess_word,guess_list,all_words):
+        save=raw_input("Do you want to save this results to file? (y/n): ")
+        mode="a+"
+        if not save.lower() == "y":
+             return
+        from os import getlogin,path
+        stat_file="."+getlogin()+".jmg"
+        if not path.exists(stat_file):
+             mode="w"
+        if self.stat_fp == None or self.stat_fp.closed:
+           self.stat_fp=open(stat_file,mode)
         score=0
         for item in guess_list:
             score += self.compute_score(item)
         result_dict={time.asctime().replace(" ","_"):{'Result':result,'Word':guess_word,'Guessed':guess_list,'Correct':all_words,'Score':score}}
-        results.write(str(result_dict)+"\n")
-        results.flush()
-        #results.close()
+        self.stat_fp.write(str(result_dict)+"\n")
+        self.stat_fp.flush()
     
-    def print_stats(self,player):
+    def print_stats(self):
+        from os import getlogin,path
+        stat_file="."+getlogin()+".jmg"
+        if not path.exists(stat_file):
+           print "Game Statistics not available:",getlogin()
+           return
+        if self.stat_fp == None or self.stat_fp.closed:
+           self.stat_fp=open(stat_file,"r")
         result_list=[]
-        fp=open(player+"_result.txt","r")
-        line = fp.readline()
+        line = self.stat_fp.readline()
         while len(line) > 0:
             line=line.strip().replace('\'','\"')
             result_dict=loads(line)
             result_list.append(result_dict)
-            line=fp.readline()
+            line=self.stat_fp.readline()
         print "No of Games Played: ",len(result_list)
         '''
         for item in result_list:
@@ -148,7 +154,7 @@ class JumblineGame(object):
                    incomplete += 1
                 #print "Played On:",key.replace("_"," "),"\nWord you Played:",item[key]['Word']
         print "No Of Games Won:",win_count,"No Of Games Lost:",lost_count,"Incomplete Games:",incomplete
-        fp.close()
+        self.stat_fp.close()
 
 class JumblineBuilder(object):
     afile=None

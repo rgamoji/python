@@ -12,11 +12,12 @@ key=randint(1,len(my_dict))
 random_word = jw.get_random_word(my_dict,key)
 jumbled_word = jw.jumble(random_word)
 
-print "You need to guess what",jumbled_word," really is and you have got",len(jumbled_word)," chances"
+#print "You need to guess what",jumbled_word," really is and you have got",len(jumbled_word)," chances"
 your_guess=""
 for i in range(0,len(jumbled_word)):
     your_guess+="-"
 count=0
+print your_guess
 while count < len(jumbled_word):
    char=raw_input("Enter your guess: ")
    your_guess=jw.fill_guess_word(random_word,your_guess,char)
