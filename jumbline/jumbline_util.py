@@ -59,6 +59,48 @@ class JumblineGame(object):
         all_words=self.j_obj.create_words(word)
         self.print_summary(False,all_words)
     
+    def hangman(self,choice):
+        my_word=self.j_obj.get_input_word(choice)
+        your_guess=""
+        for i in range(0,len(my_word)):
+            your_guess+="-"
+        count=0
+        print "Guess what the word is:",your_guess,"in",len(my_word),"attempts!"
+        while count < len(my_word):
+            char=raw_input("Enter your guess: ").upper()
+            your_guess=self.fill_guess_word(my_word,your_guess,char)
+            print your_guess,"until now!"
+            count+=1
+            if your_guess == my_word:
+               print "Viola! You win! You guessed the word correctly!",your_guess
+               break
+        else:
+            print "Oops! You lost. You guessed",your_guess,"and the correct word is",my_word
+
+    def fill_guess_word(self,my_word,guess_str,char):
+        if char == "":
+           print "Sorry! That was an empty guess!"
+           return guess_str
+        c_count = my_word.count(char)
+        if c_count == 0:
+           print "Your guess[",char,"] is no where in the word."
+           return guess_str
+        s_list = list(guess_str)
+        for item in range(0,len(my_word)):
+            if char == my_word[item]:
+               if c_count == 1:
+                  s_list[item]=char
+                  return "".join(s_list)
+               else:
+                  if char in guess_str:
+                      indexOfChar=guess_str.index(char)
+                      if item > indexOfChar:
+                         s_list[item]=char
+                         return "".join(s_list)
+                  else:
+                      s_list[item]=char
+                      return "".join(s_list)
+    
     def play_game(self,choice):
         repeat='y'
         #print "Player is: ",player,"Choice is",choice
