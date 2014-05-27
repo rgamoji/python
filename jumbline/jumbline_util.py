@@ -164,6 +164,7 @@ class JumblineGame(object):
         self.stat_fp.flush()
     
     def print_stats(self):
+        system("clear" if name != "nt" else "cls")
         from os import getlogin,path
         stat_file="."+getlogin()+".jmg"
         if not path.exists(stat_file):
@@ -172,6 +173,8 @@ class JumblineGame(object):
         if self.stat_fp == None or self.stat_fp.closed:
            self.stat_fp=open(stat_file,"r")
         result_list=[]
+
+        print "Statistics for",getlogin()
         line = self.stat_fp.readline()
         while len(line) > 0:
             line=line.strip().replace('\'','\"')

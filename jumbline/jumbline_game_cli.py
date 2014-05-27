@@ -5,15 +5,14 @@ import time
 from os import system,path
 from json import loads
 def main():    
-    #word_file=open("./TWL06.txt")
-    word_file=open("/usr/share/dict/words")
-    game=JumblineGame(word_file)
     if len(sys.argv) <= 1:
         usage()
         sys.exit(1) 
-    elif sys.argv[1] == '--my_word':
-        args=sys.argv[1:]
-        word=args[1]
+    #word_file=open("/usr/share/dict/words")
+    word_file=open("./TWL06.txt")
+    game=JumblineGame(word_file)
+    if sys.argv[1] == '--my_word':
+        word=sys.argv[2]
         game.fill_words(word.upper())
     elif sys.argv[1] == '--game': 
         if len(sys.argv) == 2:
@@ -37,7 +36,8 @@ def main():
        word_file.close()
     
 def usage():
-    print "Usage: [--game [word_length]] [--print_stats] [--my_word [word]] [--hangman [word_length]]"
+    print "Usage: <word_file>[--game [word_length]] [--print_stats] [--my_word [word]] [--hangman [word_length]]"
+    print "<word_file> is the file containing words. Default is /usr/share/dict/words"
     print "--game: To play the scrabble word game with a word having [word_length] characters. Default is 5"
     print "--print_stats: To display the game statistics."
     print "--my_word: Use this option to see all the words within the input [word]"
