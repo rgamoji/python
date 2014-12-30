@@ -4,6 +4,8 @@ import sys
 import time
 from os import system,path
 from json import loads
+
+# Adding a comment here.
 def main():    
     if len(sys.argv) <= 1:
         usage()
