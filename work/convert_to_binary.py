@@ -8,10 +8,7 @@ def compute(dec):
        bit=dec % 2
        dec=dec / 2
        inner_list.insert(0,bit)
-       if len(inner_list) == 8:
-          binary.insert(0,inner_list)
-          inner_list=[]
-    return binary
+    return inner_list
 
 def main():
     num=int(input("Enter an integer: "))
