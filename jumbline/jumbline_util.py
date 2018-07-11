@@ -10,7 +10,7 @@ class JumblineGame(object):
     def __init__(self,word_file):
         #self.word_file=word_file
         self.j_obj=JumblineBuilder(word_file)
-    def print_summary(self,isSummary,user_list,my_list=None):
+    def print_summary(self,isSummary,user_list,my_list=None,numAttempts=0):
         score=0
         if isSummary:
            print "%15s %15s" %("Your Guesses","Correct List")
@@ -18,7 +18,7 @@ class JumblineGame(object):
                print "%15s %15s" %(user_list[count],my_list[count])
            for item in user_list:
                score+=self.compute_score(item)
-           print "Your total Score is: ",score
+           print "Your total Score is: ",score,"You completed in",numAttempts,"Attempts!"
         else:
             if len(user_list) >= 30:
                 col=1
@@ -101,10 +101,18 @@ class JumblineGame(object):
                       s_list[item]=char
                       return "".join(s_list)
     
+    def isBonusEligible(self,guess,orig_word,guess_list):
+        if len(orig_word) < 6:
+           return False
+        if len(guess) == len(orig_word) and guess not in guess_list:
+           return True
+        return False
+        
     def play_game(self,choice):
         repeat='y'
         #print "Player is: ",player,"Choice is",choice
         while repeat.lower() == 'y':
+            starttime=time.mktime(time.localtime())
             orig_word=self.j_obj.get_input_word(choice)
             jumbled=self.j_obj.jumble(orig_word)
             all_words=self.j_obj.create_words(orig_word)
@@ -112,6 +120,7 @@ class JumblineGame(object):
             for item in all_words:
                 guess_list.append("".join("-"*len(item)))
             count=len(all_words)
+            attempts=0
             try:
                while count > 0 and "".join(guess_list).find('-') != -1:
                    system("clear" if name != "nt" else "cls")
@@ -119,27 +128,36 @@ class JumblineGame(object):
                    self.print_summary(False,guess_list)
                    guess=raw_input("Enter your guess: ").upper()
                    if guess in all_words:
-                       if (len(guess) == len(orig_word) or len(guess) == len(orig_word)-1) and guess not in guess_list:
+                       if self.isBonusEligible(guess,orig_word,guess_list):
+                       #if (len(guess) == len(orig_word) or len(guess) == len(orig_word)-1) and guess not in guess_list:
                        #   print "Wow! You guessed the tough One!"
                        #   print "Awarding bonus attempts."
                           count += 5
                        guess_list[all_words.index(guess)]=guess
                    count -= 1
+                   attempts+=1
             except KeyboardInterrupt:
                   print "\nIt's ok to get bored!"
         	  self.print_summary(True,guess_list,all_words)
                   self.save_game('Interrupt',jumbled,guess_list,all_words)
+                  endtime=time.mktime(time.localtime())
                   sys.exit(0)
             system("clear" if name != "nt" else "cls")
             if "".join(guess_list).find('-') != -1:
                 result='Lost'
                 print "Sorry! You lost!"
-        	self.print_summary(True,guess_list,all_words)
+        	self.print_summary(True,guess_list,all_words,attempts)
+                endtime=time.mktime(time.localtime())
+                #print "Start Time:",time.ctime(starttime),"End Time:",time.ctime(endtime),"Play Time:",int(endtime-starttime),"Seconds"
+                print "Play Time:",int(endtime-starttime),"Seconds"
                 self.save_game(result,jumbled,guess_list,all_words)
             else:
                 result='Win'
                 print "Congratulations! You guess all the words correctly."
-                self.print_summary(True,guess_list,all_words)
+                endtime=time.mktime(time.localtime())
+                #print "Start Time:",time.ctime(starttime),"End Time:",time.ctime(endtime),"Play Time:",int(endtime-starttime),"Seconds"
+                print "Play Time:",int(endtime-starttime),"Seconds"
+                self.print_summary(True,guess_list,all_words,attempts)
                 self.save_game(result,jumbled,guess_list,all_words)
             repeat=raw_input("Play Again? (y/n): ")
             if self.stat_fp and not self.stat_fp.closed:
@@ -160,7 +178,9 @@ class JumblineGame(object):
         for item in guess_list:
             score += self.compute_score(item)
         result_dict={time.asctime().replace(" ","_"):{'Result':result,'Word':guess_word,'Guessed':guess_list,'Correct':all_words,'Score':score}}
-        self.stat_fp.write(str(result_dict)+"\n")
+        #self.stat_fp.write(str(result_dict)+"\n")
+        self.stat_fp.write(dumps(result_dict,indent=2)+"\n")
+        
         self.stat_fp.flush()
     
     def print_stats(self):

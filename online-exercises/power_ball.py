@@ -8,9 +8,18 @@ count=0
 seq=[]
 pwr_bl=0
 while count < sets:
-    for rand in range(1,7):
-        seq.append(choice(range(0,54)))
-    pwr_bl=choice(range(0,43))
+    num=0
+    for rand in range(1,6):
+        num=choice(range(1,70))
+        if num not in seq:
+           seq.append(num)
+	else:
+           num=0
+           while num not in seq:
+              num=choice(range(1,70))
+              seq.append(num)
+             
+    pwr_bl=choice(range(1,27))
     print "You numbers: ",
     for num in seq:
        print num,
