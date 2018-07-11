@@ -1,2 +1,4 @@
 .idea
 *.orig
+*.pyc
+*.jmg
